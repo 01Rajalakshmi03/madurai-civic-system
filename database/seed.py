@@ -2,6 +2,9 @@ import os
 import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'server'))
 
+from dotenv import load_dotenv
+load_dotenv(os.path.join(os.path.dirname(__file__), '..', 'server', '.env'))
+
 from mongoengine import connect
 from models.user import User
 from models.complaint import Complaint, Ward
@@ -11,7 +14,7 @@ from faker import Faker
 
 fake = Faker('en_IN')
 
-connect(host='mongodb://localhost:27017/madurai_civic_db')
+connect(host=os.getenv('MONGO_URI', 'mongodb://localhost:27017/madurai_civic_db'))
 
 CATEGORIES = ['road_damage', 'garbage_accumulation', 'water_leakage',
               'drainage_problem', 'streetlight_failure', 'illegal_dumping',

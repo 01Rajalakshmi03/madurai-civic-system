@@ -16,6 +16,8 @@ def register():
     email = data.get('email', '').strip().lower()
     password = data.get('password', '')
     role = data.get('role', 'citizen')
+    if role not in ['citizen']:
+        role = 'citizen'
     phone = data.get('phone', '')
     ward = data.get('ward')
     address = data.get('address', '')
@@ -35,7 +37,7 @@ def register():
     user = User(
         name=name,
         email=email,
-        role=role if role in ['citizen', 'ward_member', 'corporation_official', 'admin'] else 'citizen',
+        role='citizen',
         phone=phone,
         ward=ward,
         address=address

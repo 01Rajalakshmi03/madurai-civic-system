@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify, g
+from mongoengine import Q
 from models.user import User
 from models.complaint import Complaint, Ward, ActivityLog, BlockchainRecord
 from utils.auth import token_required, role_required
@@ -18,15 +19,18 @@ def get_users():
     query = {}
     if role:
         query['role'] = role
-    if search:
-        query['$or'] = [
-            {'name__icontains': search},
-            {'email__icontains': search},
-            {'phone__icontains': search}
-        ]
 
-    users = User.objects(**query).order_by('-created_at').skip((page - 1) * per_page).limit(per_page)
-    total = User.objects(**query).count()
+    if search:
+        search_q = (
+            Q(name__icontains=search) |
+            Q(email__icontains=search) |
+            Q(phone__icontains=search)
+        )
+        users = User.objects(search_q, **query).order_by('-created_at').skip((page - 1) * per_page).limit(per_page)
+        total = User.objects(search_q, **query).count()
+    else:
+        users = User.objects(**query).order_by('-created_at').skip((page - 1) * per_page).limit(per_page)
+        total = User.objects(**query).count()
 
     return jsonify({
         'users': [u.to_json() for u in users],

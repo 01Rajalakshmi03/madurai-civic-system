@@ -2,8 +2,9 @@ services:
   - type: web
     name: madurai-civic-api
     runtime: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:create_app() --bind 0.0.0.0:$PORT --workers 4
+    pythonVersion: "3.12"
+    buildCommand: cd server && pip install -r requirements.txt
+    startCommand: cd server && gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 4
     envVars:
       - key: SECRET_KEY
         generateValue: true
@@ -15,5 +16,3 @@ services:
         value: production
       - key: DEBUG
         value: "False"
-      - key: PYTHON_VERSION
-        value: "3.12.10"

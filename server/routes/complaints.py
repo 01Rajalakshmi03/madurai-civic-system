@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify, g
+from mongoengine import Q
 from models.complaint import Complaint, ActivityLog, ComplaintStatus, ComplaintPriority
 from models.user import User
 from utils.auth import token_required, role_required
@@ -152,15 +153,18 @@ def get_complaints():
         query['ward'] = ward
     if priority:
         query['priority'] = priority
-    if search:
-        query['$or'] = [
-            {'title__icontains': search},
-            {'description__icontains': search},
-            {'complaint_id__icontains': search}
-        ]
 
-    complaints = Complaint.objects(**query).order_by('-created_at').skip((page - 1) * per_page).limit(per_page)
-    total = Complaint.objects(**query).count()
+    if search:
+        search_q = (
+            Q(title__icontains=search) |
+            Q(description__icontains=search) |
+            Q(complaint_id__icontains=search)
+        )
+        complaints = Complaint.objects(search_q, **query).order_by('-created_at').skip((page - 1) * per_page).limit(per_page)
+        total = Complaint.objects(search_q, **query).count()
+    else:
+        complaints = Complaint.objects(**query).order_by('-created_at').skip((page - 1) * per_page).limit(per_page)
+        total = Complaint.objects(**query).count()
 
     return jsonify({
         'complaints': [c.to_json() for c in complaints],

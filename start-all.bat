@@ -30,13 +30,13 @@ echo   Ganache started on http://127.0.0.1:7545
 
 :: Start Backend
 echo [3/5] Starting Flask Backend (Waitress)...
-start "Backend Server" cmd /k "title Backend - Port 5000 && cd /d "%~dp0server" && venv\Scripts\python.exe run_production.py"
+start "Backend Server" /D "%~dp0server" cmd /k "title Backend - Port 5000 && venv\Scripts\python.exe run_production.py"
 timeout /t 3 /nobreak >nul
 echo   Backend started on http://localhost:5000
 
 :: Start Frontend
 echo [4/5] Starting Frontend Server...
-start "Frontend Server" cmd /k "title Frontend - Port 3000 && cd /d "%~dp0client" && npx serve dist -l 3000 --single"
+start "Frontend Server" /D "%~dp0client" cmd /k "title Frontend - Port 3000 && npx serve dist -l 3000 --single"
 timeout /t 3 /nobreak >nul
 echo   Frontend started on http://localhost:3000
 

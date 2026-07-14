@@ -14,8 +14,16 @@ def create_app():
     app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER', '../uploads')
     app.config['MAX_CONTENT_LENGTH'] = int(os.getenv('MAX_CONTENT_LENGTH', 16777216))
 
-    frontend_url = os.getenv('FRONTEND_URL', '*')
-    CORS(app, resources={r"/api/*": {"origins": [frontend_url, "*"]}}, supports_credentials=True)
+    frontend_url = os.getenv('FRONTEND_URL', 'http://localhost:3000')
+    allowed_origins = set()
+    for origin in frontend_url.split(','):
+        origin = origin.strip()
+        if origin:
+            allowed_origins.add(origin)
+    allowed_origins.add('http://localhost:3000')
+    allowed_origins.add('http://localhost:5173')
+    allowed_origins.add('https://madurai-civic-system.vercel.app')
+    CORS(app, resources={r"/api/*": {"origins": list(allowed_origins)}}, supports_credentials=True)
 
     try:
         connect(host=app.config['MONGO_URI'])
