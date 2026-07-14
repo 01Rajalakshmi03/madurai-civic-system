@@ -16,3 +16,9 @@ services:
         value: production
       - key: DEBUG
         value: "False"
+      - key: FRONTEND_URL
+        value: "https://madurai-civic-system.vercel.app"
+      - key: UPLOAD_FOLDER
+        value: "/opt/render/project/src/uploads"
+      - key: MAX_CONTENT_LENGTH
+        value: "16777216"
