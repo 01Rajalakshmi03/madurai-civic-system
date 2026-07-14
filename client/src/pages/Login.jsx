@@ -96,12 +96,7 @@ export default function Login() {
             </p>
           </div>
 
-          <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700/30 rounded-xl">
-            <p className="text-xs text-gray-500 dark:text-gray-400 font-medium mb-2">Demo Credentials:</p>
-            <p className="text-xs text-gray-400 dark:text-gray-500">Citizen: citizen@test.com / password123</p>
-            <p className="text-xs text-gray-400 dark:text-gray-500">Ward: ward@test.com / password123</p>
-            <p className="text-xs text-gray-400 dark:text-gray-500">Admin: admin@madurai.gov.in / admin123</p>
-          </div>
+
         </div>
       </div>
     </div>
